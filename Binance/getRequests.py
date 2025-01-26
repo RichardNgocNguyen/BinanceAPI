@@ -1,6 +1,6 @@
 from Binance.manageRequests import BINANCE_API
 from datetime import datetime, timedelta
-import json
+
 
 # Parent: BiNANCE_API
 # Child: GET

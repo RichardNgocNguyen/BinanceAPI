@@ -2,6 +2,7 @@ from Binance.getRequests import GET
 from Binance.postRequests import POST
 from Binance.indicators import INDICATOR
 
+
 '''
 SHIBUSDT -> Base: SHIB
             Quote: USDT
