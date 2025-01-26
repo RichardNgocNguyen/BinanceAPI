@@ -14,8 +14,10 @@ class BINANCE_API:
         # Access Keys
         self.api_k = config.api_k
         self.api_s = config.api_s
-        # Time Endpoints
+        # Shared Endpoints
         self.base = 'https://api.binance.us'
+        self.ticker = '/api/v3/ticker/price'
+        self.active = '/api/v3/openOrders'
         self.time = '/api/v3/time'
         # Periods
         self.MIN_5 = "5m"
@@ -42,6 +44,30 @@ class BINANCE_API:
         current_time = self.session.get(query)
         self.updateWeights(request=current_time)
         return current_time.json()['serverTime']
+    
+    def getExchangeInfo(self, symbol):
+        if symbol in self.information:
+            return self.information[symbol]
+        else:
+            query = self.base + self.exchange
+            url = query + "?" + f"symbol={symbol}"
+            info = self.session.get(url)
+            
+            self.information[symbol] = info.json()["symbols"][0]
+
+            with open('Binance\info.txt', 'a') as file:
+                json.dump(info.json()["symbols"][0], file)
+                file.write('\n')
+
+            self.updateWeights(request=info)
+            return info.json()["symbols"][0]
+        
+    def getSymbolTick(self, symbol):
+        query = self.base + self.ticker
+        url = query + '?' + f"symbol={symbol}"
+        info = self.session.get(url)
+        self.updateWeights(request=info)
+        return info.json()
 
     def updateWeights(self, request=None, order=None):
         if request is not None:

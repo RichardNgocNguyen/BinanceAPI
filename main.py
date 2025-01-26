@@ -1,30 +1,55 @@
-from Binance.Binance_API import BINANCE_API
-from Binance.Indicators import INDICATORS
-from Binance import config
+from Binance.getRequests import GET
+from Binance.postRequests import POST
+from Binance.indicators import INDICATOR
+
+'''
+SHIBUSDT -> Base: SHIB
+            Quote: USDT
+'''
+
+get = GET()
+
+# print(get.getSymbolTick('SHIBUSDT'))
+
+# print(get.getAccount())
+
+# print(get.getBalance('SHIB'))
+
+# print(get.getExchangeInfo('SHIBUSDT'))
+# print(get.information)
+
+# print(get.getBaseAsset('SHIBUSDT'))
+# print(get.getQuoteAsset('SHIBUSDT'))
+
+# print(get.getOpenOrders())
 
 
-# SHIBUSDT -> Base: SHIB, Quote: USDT
 
-A = BINANCE_API(secret=config.api_s, public=config.api_k)
-
-
-A.get_klines(symbol= "SHIBUSDT", interval= A.HOUR_4)
-A.get_klines(symbol= "SHIBUSDT", interval= A.MIN_15)
-
-I = INDICATORS(date=A.date[A.HOUR_4], opens= A.open[A.HOUR_4], 
-               highs= A.high[A.HOUR_4], lows= A.low[A.HOUR_4], 
-               closes= A.close[A.HOUR_4], volume= A.volume[A.HOUR_4])
-
-# Uses base asset (SHIB)
-# market_buy = A.send_order(symbol='SHIBUSDT', side=A.buy, option=A.market, quantity=1524390)
-# limit_buy = A.send_order(symbol='SHIBUSDT', side=A.buy, option=A.limit, price=0.00001400, quantity=1349046)
-# market_sell = A.send_order(symbol='SHIBUSDT', side=A.sell, option=A.market, quantity=1386927)
-# limit_sell = A.send_order(symbol='SHIBUSDT', side=A.sell, option=A.limit, price=0.00002000, quantity=1349046)
+# Requires a GET request for Kline Data
+get.getKlines(symbol='SHIBUSDT', interval=get.HOUR_4)
+analysis = INDICATOR(date=get.date[get.HOUR_4], opens= get.open[get.HOUR_4], 
+                     highs= get.high[get.HOUR_4], lows= get.low[get.HOUR_4], 
+                     closes= get.close[get.HOUR_4], volume= get.volume[get.HOUR_4])
+                
+# print('Upper Band', analysis.BOLL()['upper band'][-4:], '\n')
+# print('Middle Band', analysis.BOLL()['middle band'][-4:], '\n')
+# print('Lower Band', analysis.BOLL()['lower band'][-4:], '\n')
 
 
-# Uses quote asset (USDT)
-# market_buy = A.send_order(symbol='SHIBUSDT', side=A.buy, option=A.market, quoteQty=25)
-# limit_buy = A.send_order(symbol='SHIBUSDT', side=A.buy, option=A.limit, price=0.00001550, quoteQty=22)         
-# market_sell = A.send_order(symbol='SHIBUSDT', side=A.sell, option=A.market, quoteQty=23)
-# limit_sell = A.send_order(symbol='SHIBUSDT', side=A.sell, option=A.limit, price=0.00001950, quoteQty=22)
 
+post = POST()
+
+                                        # Uses base asset (SHIB)
+# market_buy = post.sendOrder(symbol='SHIBUSDT', side=post.buy, option=post.market, quantity=558295)
+# limit_buy = post.sendOrder(symbol='SHIBUSDT', side=post.buy, option=post.limit, price=0.00001600, quantity=761305)
+# market_sell = post.sendOrder(symbol='SHIBUSDT', side=post.sell, option=post.market, quantity=558290)
+# limit_sell = post.sendOrder(symbol='SHIBUSDT', side=post.sell, option=post.limit, price=0.00002500, quantity=558290)
+
+
+                                        # Uses quote asset (USDT)
+# market_buy = post.sendOrder(symbol='SHIBUSDT', side=post.buy, option=post.market, quoteQty=11)
+# limit_buy = post.sendOrder(symbol='SHIBUSDT', side=post.buy, option=post.limit, price=0.00001500, quoteQty=15)         
+# market_sell = post.sendOrder(symbol='SHIBUSDT', side=post.sell, option=post.market, quoteQty=11)
+# limit_sell = post.sendOrder(symbol='SHIBUSDT', side=post.sell, option=post.limit, price=0.000024, quoteQty=11)
+
+# cancel_order = post.cancelOrder('SHIBUSDT')

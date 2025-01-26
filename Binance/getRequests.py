@@ -1,16 +1,16 @@
+from Binance.manageRequests import BINANCE_API
 from datetime import datetime, timedelta
 import json
-from Binance.manageRequests import BINANCE_API
 
+# Parent: BiNANCE_API
+# Child: GET
 class GET(BINANCE_API):
     def __init__(self):
         # Parent Inherited Variables
         super().__init__()
         # GET Endpoints
-        self.base = 'https://api.binance.us'
         self.exchange = '/api/v3/exchangeInfo'
         self.klines = '/api/v3/klines'
-        self.ticker = '/api/v3/ticker/price'
         self.active = '/api/v3/openOrders'
         self.account = '/api/v3/account'
         # Time Data
@@ -22,13 +22,6 @@ class GET(BINANCE_API):
         self.low = {}
         self.close = {}
         self.volume = {}
-    
-    def getSymbolTick(self, symbol):
-        query = self.base + self.ticker
-        url = query + '?' + f"symbol={symbol}"
-        info = self.session.get(url)
-        self.updateWeights(request=info)
-        return info.json()
 
     def getAccount(self, window=10000):
         query = self.base + self.account
@@ -47,23 +40,6 @@ class GET(BINANCE_API):
             if wallet[i]['asset'] == currency:
                 balance = float(wallet[i]['free'])
                 return balance
-            
-    def getExchangeInfo(self, symbol):
-        if symbol in self.information:
-            return self.information[symbol]
-        else:
-            query = self.base + self.exchange
-            url = query + "?" + f"symbol={symbol}"
-            info = self.session.get(url)
-            
-            self.information[symbol] = info.json()["symbols"][0]
-
-            with open('Binance\info.txt', 'a') as file:
-                json.dump(info.json()["symbols"][0], file)
-                file.write('\n')
-
-            self.updateWeights(request=info)
-            return info.json()["symbols"][0]
             
     def getBaseAsset(self, symbol):
         base_asset = self.getExchangeInfo(symbol)['baseAsset']
