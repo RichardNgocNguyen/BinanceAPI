@@ -4,8 +4,8 @@ import hashlib
 import hmac
 import time
 import json
-
 from Binance import config
+
 
 class BINANCE_API:
     def __init__(self):
