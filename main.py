@@ -1,6 +1,6 @@
 from Binance.getRequests import GET
 from Binance.postRequests import POST
-from Binance.indicators import INDICATOR
+from Binance.Indicators import INDICATOR
 
 
 '''
