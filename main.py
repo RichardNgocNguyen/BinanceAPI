@@ -1,5 +1,5 @@
-from Binance.getRequests import GET
-from Binance.postRequests import POST
+from Binance.getReq import GET
+from Binance.postReq import POST
 from Binance.Indicators import INDICATOR
 
 

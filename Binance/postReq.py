@@ -1,4 +1,4 @@
-from Binance.manageRequests import BINANCE_API
+from Binance.manageReq import BINANCE_API
 
 
 # Parent: BiNANCE_API
