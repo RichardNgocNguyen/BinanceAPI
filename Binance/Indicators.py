@@ -3,7 +3,7 @@ import numpy as np
 
 # <== Calling class requires this format... "Indicator(open, high, low, close, volume)"
 # WILDER, EMA, SMA, ATR, ADX, DMI, CCI, RSI, RSI Divergence, SR Levels, MACD, BOLL, Accumulation, Volume Osc
-class INDICATORS:
+class INDICATOR:
     def __init__(self, date, opens, highs, lows, closes, volume):
         self.date = np.array(date)
         self.opens = np.array(opens)
@@ -309,38 +309,3 @@ class INDICATORS:
         slow_ema = self.EMA(self.volumes, period=long_length)
         vol_osc = 100 * (fast_ema - slow_ema) / slow_ema
         return vol_osc
-    
-
-    def FAIR_VALUE_GAP(self):
-        recent = []
-        value_gap = []
-        for i in range(1, len(self.closes) - 1):
-            if self.closes[i] - self.opens[i] > 0 and (self.highs[i-1] < self.lows[i+1]) and ((self.lows[i+1] - self.highs[i-1]) / self.lows[i+1]) > 0.00:
-                mark = f"Positive {self.lows[i+1]} {self.highs[i-1]} {i+1}"
-                value_gap.append(mark)
-
-            elif self.closes[i] - self.opens[i] < 0 and (self.lows[i-1] > self.highs[i+1]) and ((self.lows[i-1] - self.highs[i+1]) / self.highs[i+1]) > 0.00:
-                mark = f"Negative {self.lows[i-1]} {self.highs[i+1]} {i+1}"
-                value_gap.append(mark)
-
-        bars_since = -1 
-        for j in range(len(self.closes)):
-            temp = []
-            for k in range(len(value_gap)):
-                sign, top, bottom, position = value_gap[k].split(" ")
-                if sign == "Positive" and self.lows[j] <= float(top) and j > int(position):
-                    recent.append(value_gap[k])
-                    bars_since = -1
-                    continue
-                elif sign == "Negative" and self.highs[j] >= float(bottom) and j > int(position):
-                    recent.append(value_gap[k])
-                    bars_since = -1
-                    continue
-                else:
-                    temp.append(value_gap[k])
-            value_gap = temp
-            bars_since += 1
-
-        return {"fair value gap": value_gap, "last mitigated": [recent[-1], bars_since]}
-
-
